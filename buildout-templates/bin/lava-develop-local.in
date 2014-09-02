@@ -1,0 +1,32 @@
+#!/bin/bash
+set -eu
+dir="$(readlink -f "$${1-.}")"
+generated=0
+while :; do
+    echo -n "Determining egg name... "
+    set +e
+    name=$(sed -ne 's/Name: \(.*\)/\1/p' "$${dir}"/*.egg-info/PKG-INFO )
+    set -e
+    if [ "x$name" = "x" ]; then
+        if [ $generated = 1 ]; then
+            echo
+            echo "Cannot determine egg name"
+            exit 1
+        fi
+        echo
+        echo "Generating egg-info files"
+        (cd $dir; /usr/bin/python setup.py egg_info > /dev/null)
+        generated=1
+        continue
+    elif [ "$(echo "$name" | wc -l)" != "1" ]; then
+        echo
+        echo "Multiple egg-info directories!?"
+        exit 1
+    fi;
+    echo "$name"
+    break
+done
+. "${instance:instance-path|shell-path}/instance.conf"
+set -x
+ln -sfT $dir "${buildout:directory|shell-path}/local/$${name}"
+"${buildout:bin-directory|shell-path}/rebuildout"

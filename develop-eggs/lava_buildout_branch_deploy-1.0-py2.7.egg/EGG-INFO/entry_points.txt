@@ -1,0 +1,4 @@
+
+        [zc.buildout.extension]
+        ext = lava_buildout_branch_deploy:enable_branch_deployment
+        

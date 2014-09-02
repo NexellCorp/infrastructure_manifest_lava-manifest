@@ -1,0 +1,12 @@
+#!/bin/bash
+set -eu
+dir="$(readlink -f "$${1-.}")"
+files=$(find "${buildout:directory|shell-path}/local" -maxdepth 1 -lname "$dir")
+if [ "x$files" = "x" ]; then
+    echo "$dir does not appear to be being used by the instance ${instance:instance-name}"
+    exit 1
+fi
+find "${buildout:directory|shell-path}/local" -maxdepth 1 -lname "$dir" -exec rm -v \{} \;
+. "${instance:instance-path|shell-path}/instance.conf"
+set -x
+"${buildout:bin-directory|shell-path}/rebuildout"

@@ -1,0 +1,4 @@
+
+        [zc.buildout.extension]
+        ext = lava_buildout_git_deploy:enable_git_repo_deployment
+        

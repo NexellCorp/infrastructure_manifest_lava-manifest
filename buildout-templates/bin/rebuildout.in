@@ -1,0 +1,4 @@
+#!/bin/bash
+. "${instance:instance-path|shell-path}/instance.conf"
+set -x
+"${buildout-exe}" -c "${buildout:directory|shell-path}/$(basename $${LAVA_BUILDOUT_CFG})" "$@"

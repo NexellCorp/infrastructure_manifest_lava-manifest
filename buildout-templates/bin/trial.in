@@ -1,0 +1,4 @@
+#!/bin/sh
+TWPATH="$("${buildout:bin-directory|shell-path}/python" -c 'import twisted, os; print os.path.dirname(twisted.__file__)')"
+TRIAL=$(readlink -f "$TWPATH/../EGG-INFO/scripts/trial")
+exec "${buildout:bin-directory|shell-path}/python" "$TRIAL" "$@"
